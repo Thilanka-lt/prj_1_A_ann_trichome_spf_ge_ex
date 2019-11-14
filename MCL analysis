@@ -1,29 +1,28 @@
-	1. In HPCC need to load modules that needed to work on orthoMCL pipeline
-
-           module purge 
-           module load icc/2016.3.210-GCC-5.4.0-2.26 impi/5.1.3.181 
-           module load OrthoMCL/2.0.9-custom-Perl-5.24.0 
-           module load BLAST/2.2.26-Linux_x86_64
+1. In HPCC need to load modules that needed to work on orthoMCL pipeline
+	module purge 
+	module load icc/2016.3.210-GCC-5.4.0-2.26 impi/5.1.3.181 
+	module load OrthoMCL/2.0.9-custom-Perl-5.24.0 
+    module load BLAST/2.2.26-Linux_x86_64
 
 	
-	2. First need to convert the columnar BLAST file format (What we get from the blastal) to .abc file format that can be used in MCL.
+2. First need to convert the columnar BLAST file format (What we get from the blastal) to .abc file format that can be used in MCL.
 	-cut will identify the e-value column created during the -m 8 of BLAST 
 	
 	cut -f 1,2,11 seq.cblast > seq.abc
 	
-	3. The newly created seq.abc file is loaded by mcxload, which writes both a network file seq.mci and a dictionary file seq.tab.
+3. The newly created seq.abc file is loaded by mcxload, which writes both a network file seq.mci and a dictionary file seq.tab.
 	The --stream-mirror option ensures that the resulting network will be undirected. 
 	The --abc-neg-log10 transforms the numerical values in the input (the BLAST E-values) by taking the logarithm in base 10 and subsequently negating the sign.
 	ceil(200) transformed values are capped so that any E-value below 1e-200 is set to a maximum allowed edge weight of 200.
 	
 	mcxload -abc seq.abc --stream-mirror --stream-neg-log10 -stream-tf 'ceil(200)' -o seq.mci -write-tab seq.tab
 	
-	4. Next we can creat a abstract lustering representation by running MCL.  We use seq.mci output file to make clusters at different  inflation values (higher inflation value means finer clustering). Running this camman the will automatically create out.seq.mci.I14, 20, 40….150. 
+4. Next we can creat a abstract lustering representation by running MCL.  We use seq.mci output file to make clusters at different  inflation values (higher inflation value means finer clustering). Running this camman the will automatically create out.seq.mci.I14, 20, 40….150. 
 	
 	mcl seq.mci -I 1.4
 	(I did clustering at 1.4,  2,  4, 6, 10, 12, 15) 
 	
-	5. Labled outputs can be created by using maxdump. This will create a dump.seq.mci.I14 --> 150 files. Also this will separate the clusters with lines and tab characters.
+5. Labled outputs can be created by using maxdump. This will create a dump.seq.mci.I14 --> 150 files. Also this will separate the clusters with lines and tab characters.
 	
 	mcxdump -icl out.seq.mci.I14 -tabr seq.tab -o dump.seq.mci.I14
 	mcxdump -icl out.seq.mci.I20 -tabr seq.tab -o dump.seq.mci.I20
@@ -32,7 +31,7 @@
 	
 	Also wc -1 dump* can show the numer of cluters at each I values
 	
-	6.  Different clustering does not ensure strict clustering. So stricly nesting set of clustering can be created from following code
+6.  Different clustering does not ensure strict clustering. So stricly nesting set of clustering can be created from following code
 	This will generate P1 --> P7 which are strict syper clustring of all of the following.
 	
 	clm order -prefix P out.seq.mci.I{14,20,60}
@@ -41,19 +40,19 @@
 	
 	mcxdump -icl P7  -o P1_150_lbld  -tabr seq.tab
 	
-	7. It is possible to encode the nested clusterings as a tree, in this case of depth just 7.
+7. It is possible to encode the nested clusterings as a tree, in this case of depth just 7.
 	It is transformed to Newick format by mcxdump. The branch lengths simply indicate the level at which nodes and clusters join, and should not be given any further meaning. 
 	
 	clm order -o seq.mcltree out.seq.mci.I{14,20,60}
-mcxdump -imx-tree seq.mcltree -tab seq.tab --newick -o tree.nwk 
+	mcxdump -imx-tree seq.mcltree -tab seq.tab --newick -o tree.nwk 
 	
-	8. Small clusters are to some extent explained by the input graph already consisting of different components. Therefore it is useful to obtain the baseline coarse clustering consisting of the natural maximum components of the input graph (also known as connected components). The program clm close does just this. 
+8. Small clusters are to some extent explained by the input graph already consisting of different components. Therefore it is useful to obtain the baseline coarse clustering consisting of the natural maximum components of the input graph (also known as connected components). The program clm close does just this. 
 	
 	Produce the seq.base output
 	
 	clm close -imx seq.mci --write-cc -o seq.base
 	
-	9. The granularity of each cluster can be visualized from.
+9. The granularity of each cluster can be visualized from.
 	
 	MCL_analysis]$ clxdo granularity seq.base out.seq.mci.I14
 	
@@ -71,7 +70,7 @@ mcxdump -imx-tree seq.mcltree -tab seq.tab --newick -o tree.nwk
 	clxdo granularity_gq 5 seq.base out.seq.mci.I{14,20,40………….150}
 	
 	
-	10. It is very useful to assess how close two clusterings are. To this end, issue the following. 
+10. It is very useful to assess how close two clusterings are. To this end, issue the following. 
 	
 	clm dist --chain out.seq.mci.I{14,20,60} 
 	
