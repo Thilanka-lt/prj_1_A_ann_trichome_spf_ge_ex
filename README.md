@@ -25,8 +25,10 @@ Species | Tissue | Accession
 
 ## 2. Gene family identification  
 ### 2.1 Prepairing and downloading data. 
- 
-GCA_003112345.1_ASM311234v1_protein.faa. 
+
+
+Unzip the protien sequnce datafile.  
+	gnzip GCA_003112345.1_ASM311234v1_protein.faa. 
   
 ### 2.2 Blasting all protien sequences agains each other.  
 This is done to identify the sequnce similarity between each other.  
