@@ -1,7 +1,33 @@
 # trichome-specific-gene-expression-
   
 ## 1. Gene family identification  
-#### 1.1 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
+#### 1.1 Prepairing and downloading data. 
+Download genome dataset and Protien datasets from NCBI genome (They have the recently published genomes in 2018).  
+GCA_003112345.1_ASM311234v1_protein.faa. 
+  
+#### 1.2 Blasting all protien sequences agains each other.  
+This is done to identify the sequnce similarity between each other.  
+__pipeline__ 
+
+* load modules. 
+	module load BLAST
+
+* Build the database of protein sequences.  
+		
+	formatdb -i #NAME_OF_YOUR_FILE# -p T
+
+	-I - input file name. 
+	-p -indicate type of file(protien) then put T. So the final extention should be - p T
+
+* Run BLAST
+	blastall -p blastp -d Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa.mod.fa -i Ath_genes.fas -o ath_to_ath.blastp -m 8 -e 0.00001
+	
+	-p - program name. In this case we are using protein blast. So it will be blastp.
+	-d - database
+	-m what data you want to see
+	-e the E threshold 
+
+#### 1.3 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
 The main focus here is to identify the gene families. MCL provides the ability to construct paralogous groups using protien sequnces.  
 
 __pipeline__  
@@ -9,10 +35,10 @@ __pipeline__
 * copy the protien sequnce file (GCA_003112345.1_ASM311234v1_protein.faa) into */mnt/home/ranawee1/prj_1_A_ann_trichome_spf_ge_ex/A_annua_data/protien_database*
 * In HPCC need to load modules that needed to work on orthoMCL pipeline.  
 
-  module purge   
+  	module purge   
 	module load icc/2016.3.210-GCC-5.4.0-2.26 impi/5.1.3.181  
 	module load OrthoMCL/2.0.9-custom-Perl-5.24.0  
-  module load BLAST/2.2.26-Linux_x86_64 
+  	module load BLAST/2.2.26-Linux_x86_64 
  
   
 
