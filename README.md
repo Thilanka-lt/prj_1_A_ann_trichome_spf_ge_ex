@@ -1,11 +1,11 @@
 # trichome-specific-gene-expression-
   
 ## 1. Gene family identification  
-#### 1.1 Prepairing and downloading data. 
+### 1.1 Prepairing and downloading data. 
 Download genome dataset and Protien datasets from NCBI genome (They have the recently published genomes in 2018).  
 GCA_003112345.1_ASM311234v1_protein.faa. 
   
-#### 1.2 Blasting all protien sequences agains each other.  
+### 1.2 Blasting all protien sequences agains each other.  
 This is done to identify the sequnce similarity between each other.  
 __pipeline__ 
 
@@ -27,7 +27,7 @@ __pipeline__
 	-m what data you want to see
 	-e the E threshold 
 
-#### 1.3 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
+### 1.3 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
 The main focus here is to identify the gene families. MCL provides the ability to construct paralogous groups using protien sequnces.  
 
 __pipeline__  
@@ -118,7 +118,9 @@ __pipeline__
 	
 	d = distance between clusters
 
-#### 1.4 Run HMMER on A_annua protien sequnces againts all pfam domains
+### 1.4 Run HMMER on A_annua protien sequnces againts all pfam domains
+
+
 
 
 
