@@ -1,6 +1,5 @@
 # **Trichome Specific Gene Expression**
 
-
 ## 1. Download the raw data
 
 The expression data are dowloaded from the NCBI SRA database.
