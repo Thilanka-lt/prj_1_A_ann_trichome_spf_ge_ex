@@ -1,6 +1,5 @@
-# **trichome-specific-gene-expression**
+# **Trichome Specific Gene Expression**
 
-# Matrials and Methods 
 
 ## 1. Download the raw data
 
