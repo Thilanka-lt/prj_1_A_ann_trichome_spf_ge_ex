@@ -1,11 +1,32 @@
 # trichome-specific-gene-expression-
-  
-## 1. Gene family identification  
-### 1.1 Prepairing and downloading data. 
-Download genome dataset and Protien datasets from NCBI genome (They have the recently published genomes in 2018).  
+
+## 1. Download the raw data
+
+The expression data are dowloaded from the NCBI SRA database.
+
+Species | Tissue | Accession
+-------- |-------|---------
+*Artemisia annua*| Trichome |SRX3562825  
+*Artemisia annua*| Flower |SRX3562826 
+*Artemisia annua*| Seed |SRX3562827 
+*Artemisia annua*| Bud |SRX3562828 
+*Artemisia annua*| Epidermis |SRX3562829 
+*Artemisia annua*| Root |SRX3562830
+*Artemisia annua*| Stem |SRX3562831
+*Artemisia annua*| Old leaf |SRX3562832
+*Artemisia annua*| Young leaf |SRX3562833 
+
+* Use the **qsub_slurm.py** to submit this as job.
+	fastq-dump SRX3562827 ---> all the accesions in a get_data.sh
+
+* Download genome dataset and Protien datasets from NCBI genome (They have the recently published genomes in 2018). 
+
+## 2. Gene family identification  
+### 2.1 Prepairing and downloading data. 
+ 
 GCA_003112345.1_ASM311234v1_protein.faa. 
   
-### 1.2 Blasting all protien sequences agains each other.  
+### 2.2 Blasting all protien sequences agains each other.  
 This is done to identify the sequnce similarity between each other.  
 __pipeline__ 
 
@@ -27,7 +48,7 @@ __pipeline__
 	-m what data you want to see
 	-e the E threshold 
 
-### 1.3 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
+### 2.3 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
 The main focus here is to identify the gene families. MCL provides the ability to construct paralogous groups using protien sequnces.  
 
 __pipeline__  
@@ -118,7 +139,7 @@ __pipeline__
 	
 	d = distance between clusters
 
-### 1.4 Run HMMER on A_annua protien sequnces againts all pfam domains
+### 2.4 Run HMMER on A_annua protien sequnces againts all pfam domains
 
 
 
