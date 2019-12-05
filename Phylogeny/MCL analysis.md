@@ -9,23 +9,28 @@ This is done to identify the sequnce similarity between each other.
 __pipeline__ 
 
 * load modules. 
+```
 	module load BLAST
+```
 
 * Build the database of protein sequences.  
-		
+```		
 	formatdb -i #NAME_OF_YOUR_FILE# -p T
 
 	-I - input file name. 
 	-p -indicate type of file(protien) then put T. So the final extention should be - p T
-
+```
 * Run BLAST
+```
 	blastall -p blastp -d Athaliana_167_TAIR10.protein_primaryTranscriptOnly.fa.mod.fa -i Ath_genes.fas -o ath_to_ath.blastp -m 8 -e 0.00001
-	
+
+```
+
 	-p - program name. In this case we are using protein blast. So it will be blastp.
 	-d - database
 	-m what data you want to see
 	-e the E threshold 
-
+	
 ### 2.3 MCL (Markov Cluster Algorithm) analysis on A. anuua protien sequnces. 
 The main focus here is to identify the gene families. MCL provides the ability to construct paralogous groups using protien sequnces.  
 
@@ -33,41 +38,47 @@ __pipeline__
   
 * copy the protien sequnce file (GCA_003112345.1_ASM311234v1_protein.faa) into */mnt/home/ranawee1/prj_1_A_ann_trichome_spf_ge_ex/A_annua_data/protien_database*
 * In HPCC need to load modules that needed to work on orthoMCL pipeline.  
-
+```
   	module purge   
 	module load icc/2016.3.210-GCC-5.4.0-2.26 impi/5.1.3.181  
 	module load OrthoMCL/2.0.9-custom-Perl-5.24.0  
   	module load BLAST/2.2.26-Linux_x86_64 
- 
+```
   
 
 	
 * First need to convert the columnar BLAST file format (What we get from the blastal) to .abc file format that can be used in MCL.
+```
 	-cut will identify the e-value column created during the -m 8 of BLAST 
 	
 	cut -f 1,2,11 seq.cblast > seq.abc
-	
+```
+
 * The newly created seq.abc file is loaded by mcxload, which writes both a network file seq.mci and a dictionary file seq.tab.
 	The --stream-mirror option ensures that the resulting network will be undirected. 
 	The --abc-neg-log10 transforms the numerical values in the input (the BLAST E-values) by taking the logarithm in base 10 and subsequently negating the sign.
 	ceil(200) transformed values are capped so that any E-value below 1e-200 is set to a maximum allowed edge weight of 200.
-	
+```	
 	mcxload -abc seq.abc --stream-mirror --stream-neg-log10 -stream-tf 'ceil(200)' -o seq.mci -write-tab seq.tab
-	
+```
+
 * Next we can creat a abstract lustering representation by running MCL.  We use seq.mci output file to make clusters at different  inflation values (higher inflation value means finer clustering). Running this camman the will automatically create out.seq.mci.I14, 20, 40….150. 
-	
+```	
 	mcl seq.mci -I 1.4
 	(I did clustering at 1.4,  2,  4, 6, 10, 12, 15) 
-	
+```
+
 * Labled outputs can be created by using maxdump. This will create a dump.seq.mci.I14 --> 150 files. Also this will separate the clusters with lines and tab characters.
-	
+```	
 	mcxdump -icl out.seq.mci.I14 -tabr seq.tab -o dump.seq.mci.I14
 	mcxdump -icl out.seq.mci.I20 -tabr seq.tab -o dump.seq.mci.I20
 	mcxdump -icl out.seq.mci.I40 -tabr seq.tab -o dump.seq.mci.I40
 	mcxdump -icl out.seq.mci.I60 -tabr seq.tab -o dump.seq.mci.I60
-	
+```
+
 	Also wc -1 dump* can show the numer of cluters at each I values
-	
+### this part can be done but not really needed to proceeed with our analysis
+
 *  Different clustering does not ensure strict clustering. So stricly nesting set of clustering can be created from following code
 	This will generate P1 --> P7 which are strict syper clustring of all of the following.
 	
