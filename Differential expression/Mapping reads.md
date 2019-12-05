@@ -10,4 +10,4 @@ module load Bowtie2/2.3.4.2
 bowtie2-build GCA_003112345.1_ASM311234v1_genomic.fa GCA_003112345.1_ASM311234v1_genomic
 
 ```
-
+* Four index files were created with the neame *GCA_003112345.1_ASM311234v1_genomic.1.bt2 .....GCA_003112345.1_ASM311234v1_genomic.4.bt2* in */mnt/home/ranawee1/01_A_annua_trichome/differential_expression*
