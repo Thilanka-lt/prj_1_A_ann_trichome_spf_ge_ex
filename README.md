@@ -19,7 +19,12 @@ Species | Tissue | Accession
 * Use the **qsub_slurm.py** to submit this as job.
 	fastq-dump SRX3562827 ---> all the accesions in a get_data.sh
 
-* Download genome dataset and Protien datasets from NCBI genome (They have the recently published genomes in 2018). 
+* Download **1- genome dataset**,  **2- Protien datasets** and **3- Annotatin** from NCBI genome (They have the recently published genomes in 2018). 
+```
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/112/345/GCA_003112345.1_ASM311234v1/GCA_003112345.1_ASM311234v1_genomic.fna.gz
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/112/345/GCA_003112345.1_ASM311234v1/GCA_003112345.1_ASM311234v1_protein.faa.gz
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/003/112/345/GCA_003112345.1_ASM311234v1/GCA_003112345.1_ASM311234v1_genomic.gff.gz
+```
 
 ## 2. Gene family identification  
 ### 2.1 Prepairing and downloading data. 
