@@ -15,7 +15,7 @@ bowtie2-build GCA_003112345.1_ASM311234v1_genomic.fa GCA_003112345.1_ASM311234v1
 ### 2. Read qulity check before trimming
 It is essential to see the qulity of RNA seq files. 
 ```
-/mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_fast_QC_nontrimmed.py. 
+/mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_fast_QC_nontrimmed.py 
 ```
 This script requries the working directory and print the output to file name you like by doing **<- file name** 
 ```
@@ -27,4 +27,31 @@ for root, dirs, files in os.walk(path):
                 if f.endswith(".fastq"): 
                     print("fastqc -o /mnt/home/ranawee1/01_A_annua_trichome/differential_expression/fastQC_before_trimming/ -f fastq %s" %(f))
                     
+```
+Then,
+```
+python qsub_slurm.py -f submit -c fastQC_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'FastQC' -wd ./
+```
+
+### 3. Trimming the reads
+Data trimming is a essential  step in analysing RNA seq. 
+We need to remove any adapter sequnces that might be present in the RNA sequnce reads.
+Also, we are pooling out the low quality bases from the sequnce reads.
+```
+/mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_trimming.py 
+```
+This script requries the working directory and print the output to file name you like by doing **<- file name** 
+```
+import os, sys
+path = sys.argv[1]
+os.chdir(path)
+for root, dirs, files in os.walk(path):
+        for f in files:
+                if f.endswith(".fastq"): 
+                    print("java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar SE -threads 4 %s %s.trim ILLUMINACLIP:all_PE_adapters.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:30" %(f, f))
+
+```
+Then,
+```
+python qsub_slurm.py -f submit -c trimming_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'Trimmomatic/0.38-Java-1.8.0_162' -wd ./
 ```
