@@ -55,3 +55,47 @@ Then,
 ```
 python qsub_slurm.py -f submit -c trimming_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'Trimmomatic/0.38-Java-1.8.0_162' -wd ./
 ```
+
+### 4. Read qulity check after trimming
+
+```
+/mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_fast_QC_trimmed.py 
+```
+This script requries the working directory and print the output to file name you like by doing **<- file name** 
+```
+import os, sys
+path = sys.argv[1]
+os.chdir(path)
+for root, dirs, files in os.walk(path):
+        for f in files:
+                if f.endswith(".trim"): 
+                    print("fastqc -o /mnt/home/ranawee1/01_A_annua_trichome/differential_expression/fastQC_after_trimming/ -f fastq %s" %(f))
+                    
+```
+Then,
+```
+python qsub_slurm.py -f submit -c fastQC_trimmed_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'FastQC' -wd ./
+```
+
+### Mapping reads to genome
+
+First we need to convert fastq.TRIM > .part file
+To do this we can use the below script.
+
+```
+/mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_trimming.py
+```
+This script requries the working directory and print the output to file name you like by doing **<- file name** 
+```
+import os, sys
+path = sys.argv[1]
+os.chdir(path)
+for root, dirs, files in os.walk(path):
+        for f in files:
+                if f.endswith(".trim"): 
+                    print("head -n 4000000", f, ">", f.replace(".trim", ".part" ))
+```
+Then,
+```
+python qsub_slurm.py -f submit -c part_file_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'GCC/5.4.0-2.26  OpenMPI/1.10.3-CUDA TopHat/2.1.1' -wd ./
+```
