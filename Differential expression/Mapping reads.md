@@ -14,7 +14,9 @@ bowtie2-build GCA_003112345.1_ASM311234v1_genomic.fa GCA_003112345.1_ASM311234v1
 
 ### 2. Read qulity check before trimming
 It is essential to see the qulity of RNA seq files. 
-used /mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_fast_QC_nontrimmed.py. 
+```
+/mnt/home/ranawee1/01_A_annua_trichome/differential_expression/do_all_fast_QC_nontrimmed.py. 
+```
 This script requries the working directory and print the output to file name you like by doing **<- file name** 
 ```
 import os, sys
