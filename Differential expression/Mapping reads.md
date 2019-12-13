@@ -46,14 +46,14 @@ import os, sys
 path = sys.argv[1]
 os.chdir(path)
 for root, dirs, files in os.walk(path):
-        for f in files:
-                if f.endswith(".fastq"): 
-                    print("java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar SE -threads 4 %s %s.trim ILLUMINACLIP:all_PE_adapters.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:30" %(f, f))
+    for f in files:
+        if f.endswith("_1.fastq"): 
+            print("java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar PE -threads 4", f, f.replace("_1.fastq", "_2.fastq"), f+".trimP", f+".trimU", f.replace("_1.fastq", "_2.fastq")+".trimP", f.replace("_1.fastq", "_2.fastq")+".trimU", "ILLUMINACLIP:all_PE_adapters.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20")
 
 ```
 Then,
 ```
-python qsub_slurm.py -f submit -c trimming_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'Trimmomatic/0.38-Java-1.8.0_162' -wd ./
+python qsub_slurm.py -f submit -c do_all_trimming_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'Trimmomatic/0.38-Java-1.8.0_162' -wd ./
 ```
 
 ### 4. Read qulity check after trimming
@@ -68,7 +68,7 @@ path = sys.argv[1]
 os.chdir(path)
 for root, dirs, files in os.walk(path):
         for f in files:
-                if f.endswith(".trim"): 
+                if f.endswith(".trimP"): 
                     print("fastqc -o /mnt/home/ranawee1/01_A_annua_trichome/differential_expression/fastQC_after_trimming/ -f fastq %s" %(f))
                     
 ```
