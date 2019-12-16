@@ -1,5 +1,6 @@
 ## 1. Download the raw data
 The expression data are dowloaded from the NCBI SRA database.
+
 Species | Tissue | Accession
 -------- |-------|---------
 *Artemisia annua*| Trichome |SRX3562825  
