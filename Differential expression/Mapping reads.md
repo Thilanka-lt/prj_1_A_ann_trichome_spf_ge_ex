@@ -51,6 +51,7 @@ for root, dirs, files in os.walk(path):
             print("java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar PE -threads 4", f, f.replace("_1.fastq", "_2.fastq"), f+".trimP", f+".trimU", f.replace("_1.fastq", "_2.fastq")+".trimP", f.replace("_1.fastq", "_2.fastq")+".trimU", "ILLUMINACLIP:all_PE_adapters.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:20")
 
 ```
+<span style="color: green"> Some green text </span>
 Then,
 ```
 python qsub_slurm.py -f submit -c do_all_trimming_cmd.txt -p 4 -u ranawee1 -w 1200  -m 10 -mo 'Trimmomatic/0.38-Java-1.8.0_162' -wd ./
